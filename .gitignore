@@ -94,6 +94,9 @@ venv.bak/
 .spyderproject
 .spyproject
 
+# VScode poject settings
+.vscode/
+
 # Rope project settings
 .ropeproject
 
