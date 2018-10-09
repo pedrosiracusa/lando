@@ -1,3 +1,7 @@
+# Future: json context could look like { 'persistent_items': {...}, 'volatile_items': {...} }
+# persistent_items: should be passed back and forth in all interactions. ex: user_responses
+# volatile_items: Only make sense for a given, particular interaction. ex: current_question, next_question, message, input_type, input
+
 class Question:
     def __init__(self, name, **attr):
         self.name=name
@@ -81,6 +85,7 @@ class Questionnaire:
     """
     Stores a graph of questions and runs it; keeps track of interactions using a context dictionary.
     """
+    
     def __init__(self, questionnaire_dict=None):
         """
         Questionnaire dict to be used to build the instance
@@ -171,6 +176,7 @@ class Questionnaire:
 
 
 class Context:
+    # TODO: After receiving user input, should send next question in the response
     def __init__(self, **data):
         self.data=data
         if self.data.get('responses') is None:
