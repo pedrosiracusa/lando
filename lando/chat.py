@@ -1,5 +1,3 @@
-# coding: utf-8
-
 class Question:
     def __init__(self, name, **attr):
         self.name=name
@@ -19,14 +17,6 @@ class Question:
         if self.options is None: return None
         return { o:t for o,t in zip(self.options, self.options_text) }
     
-    def saveUserInput(self, inpt):
-        """
-        Saves user response (input) to the question.
-        input type: 'text','number','choice'
-        """
-        self.user_input = { 'text':str, 
-                            'number':float, 
-                            'choice':int }[self.user_input_type]( inpt )
         
     def isFinalQuestion(self):
         return True if self.next is None else False
@@ -118,13 +108,23 @@ class Questionnaire:
 
         return context
     
-    def getUserInput(self, context):
-        user_input = context.data['user_input']
-        questionId = context.data['current_question']
+    def saveUserInput(self, context):
+        """
+        Saves user response (input) to the question.
+        Finally, clears user input
+        input type: 'text','number','choice'
+        """
+        user_input = context.data.get('user_input','')
+        questionId = context.data.get('current_question')
         
         q = self.questions.get(questionId)
-        q.saveUserInput(user_input)
+        q.user_input = { 'text':str, 
+                            'number':float, 
+                            'choice':int }[q.user_input_type]( user_input )
+
         context.data['responses'][q.name]=q.checkUserInput()
+
+        context.clear_user_input()
         return context
     
     def sendResponse(self, context):
@@ -175,12 +175,32 @@ class Context:
         self.data=data
         if self.data.get('responses') is None:
             self.data['responses']={}
-        
+
+    @classmethod
+    def from_json_data(cls, datadict):
+        return cls(**datadict) 
+    
+    def get_current_question(self):
+        return self.data.get('current_question')
+
+    def get_user_input(self):
+        return self.data.get('user_input','')
+
     def set_user_input(self,user_input):
         self.data['user_input']=user_input
 
+    def clear_user_input(self):
+        self.data['user_input']=''
+
     def update(self, data):
         self.data.update(data)
+
+
+if __name__=='__main__':
+    c =Context(a='Name', b='Some other')
+    print(c.to_json())
+    c = Context.from_json("{\"a\": \"IsName\", \"b\": \"Some other name\", \"c\": {\"ca\":true, \"cb\":false}}")
+    print(c.data)
 
 
 

@@ -1,10 +1,8 @@
-# coding: utf-8
-
 from .chat import Questionnaire, Response, Context
 
 questionnaire = {
     'q1': {
-        "prompt": "Oi! Me chamo Lando! Sou um assistente de terras. Qual seu nome?",
+        "prompt": "Olá! Me chamo Lando! Sou um assistente de terras. Qual seu nome?",
         "input_type": "text",
         "next":['q2']
           },
