@@ -28,22 +28,18 @@ class Question:
     def attachResponse(self, response):
         self.response=response
         
-    def respond(self, context=None):
-        print(context.data)
+    def respond(self, context):
+        """
+        Returns the response message (associated to the respective Response object)
+        """
         if not hasattr(self,'response'):
             return None
         
-        if not hasattr(self,'user_input'):
-            user_input=context.data['responses'][self.name]
-            return self.response.getResponse(user_input)
-
-        return self.response.getResponse(self.user_input)
+        user_input=context.data['responses'][self.name]
+        return self.response.getResponse(user_input)
 
     
-    def checkUserInput(self):
-        return self.user_input
-    
-    def getNextQuestionName(self):
+    def getNextQuestionName(self, user_input):
         """
         Checks user input to determine the next question in the graph.
         """
@@ -51,7 +47,7 @@ class Question:
             return None
         
         if len(self.next)>1:
-            return self.next[ self.options.index(self.checkUserInput()) ]
+            return self.next[ self.options.index(user_input) ]
         else:
             return self.next[0]
         
@@ -63,6 +59,13 @@ class Question:
             return f"{self.prompt} {self.getOptions()}"
         else:
             return self.prompt
+
+    def parseUserInput(self, user_input):
+        return { 
+            'text':str, 
+            'number':float, 
+            'choice':int }[self.user_input_type]( user_input )
+
 
 
 
@@ -97,6 +100,9 @@ class Questionnaire:
             
     
     def sendQuestion(self, context):
+        """
+        Sends current question (from context) to user
+        """
         questionId = context.data['current_question']
         q = self.questions.get(questionId)
         context.data['message']=q.promptMessage()
@@ -115,63 +121,30 @@ class Questionnaire:
     
     def saveUserInput(self, context):
         """
-        Saves user response (input) to the question.
+        Saves user response (input) to the context, using the question to parse it.
         Finally, clears user input
         input type: 'text','number','choice'
         """
         user_input = context.data.get('user_input','')
         questionId = context.data.get('current_question')
-        
         q = self.questions.get(questionId)
-        q.user_input = { 'text':str, 
-                            'number':float, 
-                            'choice':int }[q.user_input_type]( user_input )
-
-        context.data['responses'][q.name]=q.checkUserInput()
+        
+        context.data['responses'][questionId] = q.parseUserInput(user_input)
 
         context.clear_user_input()
         return context
     
     def sendResponse(self, context):
-        questionId = context.data['current_question']
+        questionId = context.data.get('current_question')
+        user_input = context.data['responses'].get(questionId)
         q = self.questions.get(questionId)
         response = q.respond(context)
         context.data['message'] = response
+        context.data['next_question'] = q.getNextQuestionName(user_input)
         return context
     
-    def getNextQuestion(self,context):
-        currentQuestion = self.questions.get( context.data['current_question'] )
-        nextQuestion = currentQuestion.getNextQuestionName()
-        
-            
-        context.data['current_question'] = nextQuestion
-        
-        # clean non-relevant data from context
-        context.data.pop('message',None)
-        context.data.pop('user_input',None)
-        context.data.pop('input_type',None)
-        context.data.pop('input_options',None)
-        context.data.pop('input_options_text',None)
-        return context
+
     
-    def run(self, context):
-        finish=False
-        
-        while not finish:
-            self.sendQuestion(context)
-            user_input = input(context.data['message'])
-            context.set_user_input(user_input)
-            self.getUserInput(context)
-            self.sendResponse(context)
-            print(context.data['message'])
-            self.getNextQuestion(context)
-            
-            next_q = context.data['current_question']
-            if next_q is None:
-                finish=True
-        
-        print("End of run")
-        return context
 
 
 
@@ -200,13 +173,4 @@ class Context:
 
     def update(self, data):
         self.data.update(data)
-
-
-if __name__=='__main__':
-    c =Context(a='Name', b='Some other')
-    print(c.to_json())
-    c = Context.from_json("{\"a\": \"IsName\", \"b\": \"Some other name\", \"c\": {\"ca\":true, \"cb\":false}}")
-    print(c.data)
-
-
 
