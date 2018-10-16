@@ -1,5 +1,4 @@
 from requests import put
-from copy import deepcopy
 import json
 
 initial_question='q1'
@@ -7,25 +6,27 @@ initial_question='q1'
 class Client:
     def __init__(self, api_endpoint):
         self.api_endpoint = api_endpoint
-        self.current_question = initial_question
-        self.response={}
-        self.request={}
+        self.response=None
 
-        self.request_questionnaire() # set initial response (first question)
+    
+    def requestNextQuestion(self):
+        if self.response is None:
+            req_body_data = {'current_question':initial_question}
 
-    def request_questionnaire(self):
-        """This method executes only once (during class initialization). Returns a dict"""
-        data = {"current_question":initial_question}
-        resp = put(self.api_endpoint, data=json.dumps(data))
-        self.response=resp.json()
+        else:
+            req_body_data = self.response.json()
+            nextQuestion = req_body_data.get('next_question')
+            req_body_data.update({'current_question': nextQuestion })
+
+        resp = put(self.api_endpoint, data=json.dumps( req_body_data ))
+        self.response=resp
+        return resp
+
+    def getMessage(self):
+        return self.response.json().get('message')
 
     def send_input(self, inpt):
-        """Returns a dict"""
-        self.request = deepcopy(self.response)
-        self.request.update({'user_input':inpt})
-        resp = put(self.api_endpoint, data=json.dumps( self.request ))   
-        self.response=resp.json()
-
-    def get_next_question(self):
-        # TODO: from the last response (after user input), must get next question
-        pass
+        req_body_data = self.response.json()
+        req_body_data.update({'user_input':inpt}) 
+        resp = put(self.api_endpoint, data=json.dumps( req_body_data ))   
+        self.response=resp
