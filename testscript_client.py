@@ -25,5 +25,5 @@ for answer in ["Pedro", #Nome
     cli.requestNextQuestion()
 
 
-
+print(cli.response.json())
 

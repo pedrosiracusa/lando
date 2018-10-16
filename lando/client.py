@@ -19,7 +19,8 @@ class Client:
             req_body_data.update({'current_question': nextQuestion })
 
         resp = put(self.api_endpoint, data=json.dumps( req_body_data ))
-        self.response=resp
+        if resp.status_code==200: 
+            self.response=resp
         return resp
 
     def getMessage(self):
@@ -29,4 +30,6 @@ class Client:
         req_body_data = self.response.json()
         req_body_data.update({'user_input':inpt}) 
         resp = put(self.api_endpoint, data=json.dumps( req_body_data ))   
-        self.response=resp
+        if resp.status_code==200: 
+            self.response=resp
+        return resp
