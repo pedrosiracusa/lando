@@ -1,7 +1,7 @@
 name: webscraping_selenium
 channels:
-  - anaconda
   - conda-forge
+  - anaconda
   - defaults
 dependencies:
   - beautifulsoup4=4.6.3=py36_0
@@ -32,11 +32,13 @@ dependencies:
   - ca-certificates=2018.03.07=0
   - certifi=2018.10.15=py36_0
   - colorama=0.4.0=py36_0
+  - cycler=0.10.0=py36h009560c_0
   - decorator=4.3.0=py36_0
   - entrypoints=0.2.3=py36_2
+  - freetype=2.9.1=ha9979f8_1
   - icc_rt=2017.0.4=h97af966_0
   - intel-openmp=2019.0=118
-  - ipykernel=5.0.0=py36h39e3cac_0
+  - ipykernel=5.1.0=py36h39e3cac_0
   - ipython=7.0.1=py36h39e3cac_0
   - ipython_genutils=0.2.0=py36h3c5d0ee_0
   - ipywidgets=7.4.2=py36_0
@@ -47,12 +49,14 @@ dependencies:
   - jupyter_client=5.2.3=py36_0
   - jupyter_console=6.0.0=py36_0
   - jupyter_core=4.4.0=py36_0
+  - kiwisolver=1.0.1=py36h6538335_0
   - m2w64-gcc-libgfortran=5.3.0=6
   - m2w64-gcc-libs=5.3.0=7
   - m2w64-gcc-libs-core=5.3.0=7
   - m2w64-gmp=6.1.0=2
   - m2w64-libwinpthread-git=5.0.0.4634.697f757=2
   - markupsafe=1.0=py36hfa6e2cd_1
+  - matplotlib=2.2.2=py36had4c4a9_2
   - mkl=2019.0=118
   - mkl_fft=1.0.6=py36hdbbee80_0
   - mkl_random=1.0.1=py36h77b88f5_1
@@ -67,11 +71,13 @@ dependencies:
   - pandoc=2.2.3.2=0
   - pandocfilters=1.4.2=py36_1
   - parso=0.3.1=py36_0
+  - patsy=0.5.0=py36_0
   - pickleshare=0.7.5=py36_0
   - pip=10.0.1=py36_0
   - prometheus_client=0.4.2=py36_0
   - prompt_toolkit=2.0.6=py36_0
   - pygments=2.2.0=py36hb010967_0
+  - pyparsing=2.2.2=py36_0
   - pyqt=5.6.0=py36_2
   - python=3.6.6=hea74fb7_0
   - python-dateutil=2.7.3=py36_0
@@ -79,11 +85,15 @@ dependencies:
   - pywinpty=0.5.4=py36_0
   - pyzmq=17.1.2=py36hfa6e2cd_0
   - qt=5.6.2=vc14h6f8c307_12
+  - regex=2018.08.29=py36hfa6e2cd_0
+  - scipy=1.1.0=py36h4f6bf74_1
+  - seaborn=0.9.0=py36_0
   - send2trash=1.5.0=py36_0
   - setuptools=40.4.3=py36_0
   - simplegeneric=0.8.1=py36_2
   - sip=4.19.8=py36h6538335_0
   - six=1.11.0=py36_1
+  - statsmodels=0.9.0=py36h452e1ab_0
   - terminado=0.8.1=py36_1
   - testpath=0.4.2=py36_0
   - tornado=5.1.1=py36hfa6e2cd_0
@@ -94,3 +104,4 @@ dependencies:
   - widgetsnbextension=3.4.2=py36_0
   - wincertstore=0.2=py36h7fe50ca_0
   - winpty=0.4.3=4
+prefix: C:\Users\Pedro\Anaconda3\envs\webscraping_selenium
