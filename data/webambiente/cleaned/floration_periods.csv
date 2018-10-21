@@ -1,4 +1,4 @@
-id,Espécie,pf_jan,pf_fev,pf_mar,pf_abr,pf_mai,pf_jun,pf_jul,pf_ago,pf_set,pf_out,pf_nov,pf_dez
+id,Espécie,jan,fev,mar,abr,mai,jun,jul,ago,set,out,nov,dez
 0,Abarema brachystachya,1.0,1.0,1.0,1.0,1.0,1.0,0.0,0.0,1.0,1.0,1.0,1.0
 1,Abarema cochleata,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,0.0
 2,Abarema floribunda,0.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,0.0,0.0
