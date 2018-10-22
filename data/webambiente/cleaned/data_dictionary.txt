@@ -1,0 +1,225 @@
+This data dictionary describes the native vegetation species dataset
+The dataset has been extracted from the webambiente portal (https://webambiente.gov.br) through web scraping, followed by a general cleanig routine.
+The resulting dataset is composed by the following tables:
+
+  - main.csv : The main table, containing original information;
+  - floration_periods.csv: Auxiliary table containing floration period data (one-hot encoded);
+  - fruiting_periods.csv: Auxiliary table containing fruiting period data (one-hot encoded); 
+  - seeding_collection_periods.csv: Auxiliary table containing seed collection period data (one-hot encoded); 
+
+
+==============
+Identification
+--------------
+
+Fields:
+
+
+  Espécie
+    Scientific name of the species
+    Data type: string
+
+
+  Nome Popular: 
+    Vernacular name of the species
+    Data type: string, with multiple values separated by "|"
+
+
+  Sinonímia: 
+    Scientific name synonyms
+    Data type: string
+
+
+  Família: 
+    Name of the family taxon to which the species belongs
+    Data type: string
+
+
+  Bioma: 
+    Biomes where the species occurs
+    Data type: string, with multiple values separated by "|"
+    Number of distinct values: 6 
+    Values: [ cerrado, mata atlantica, amazonia, pantanal, caatinga, pampa ]
+
+
+  Formação Vegetal:
+    Vegetal formations in which the species may be observed
+    Data type: string, with multiple values separated by "|"  
+    Number of distinct values: 3 
+    Values: [ florestal, savanica, campestre ]
+
+
+  Fitofisionomias: 
+    Phytophysiognomies in which the species may be observed
+    Data type: string, with multiple values separated by "|"
+    Number of distinct values: 45 
+    Values: [ banhado, caatinga arborea, caatinga arbustiva, ... , vegetacao savanoide, vereda ]
+
+
+  Presença nos estados: 
+    States where the species occurs.
+    Data type: string, with multiple values separated by "|"
+    Number of distinct values: 27 
+    Values: [ ac, al, am, ... ,sp, to ]
+
+
+
+====================
+Seedlings production
+--------------------
+
+Fields:
+
+
+  Período de coleta de sementes:
+    The most appropriate period (months) for collecting seeds from the species
+    Data type: string, structured (Period-like data)
+    Values:
+      The string stores information about the seed collection period for each biome and state. Periods are coded as tuples, where the former element is the start month and the latter one, the end month for that period. When no particular biome is specified, the biome name becomes "all".
+      Examples: 
+        "all: (set-out)",
+        "cerrado: (jul-fev); pantanal: (out-fev); amazonia: (jul-jan)",
+        "mata atlantica: <sp (jul-set)><pr (jul-dez)><sc (jul-nov)><rs (set-nov)>"
+  
+
+  Beneficiamento de sementes:
+    Seed processing reccommendations, before they can be planted.
+    Data type: string, descriptive
+
+
+  Porcentagem de germinação:
+    Percentage of seed germination.
+    Data type: int, label encoded
+    Number of distinct values: 5
+    Values:
+      0: 0 to 9 % of seeds germinate (very poor)
+      1: 10 to 19 % of seeds germinate (poor)
+      2: 20 to 49 % of seeds germinate (fair)
+      3: 50 to 80 % of seeds germinate (good)
+      4: 81 to 100 % of seeds germinate (excellent)
+
+
+  Substrato da muda:
+    Optimal substrate for seedling development.
+    Data type: string, categorical
+    Number of distinct values: 7
+    Values:
+      t1: Type-1 soil, BDPF (well-drained and poorly fertile)
+      t2: Type-2 soil, SDPF (super well-drained and poorly fertile)
+      t3: Type-3 soil, BDF (well-drained and fertile)
+      t4: Type-4 soil, MDF (poorly drained and fertile)
+      ga: Group A substrate (organic compounds made of bovine manure, eucalyptus and pinus bark, orange bagasse, urban thrash and other wastes)
+      s1: Custom substrate 1 (3 parts of black soil + 1 part sawdust + 1 part of cattle manure or aviary bed)
+      s2: Custom substrate 2 (soil + 20% aviary bed + npk10.28.20)
+
+      Related technical information: 
+        https://ainfo.cnptia.embrapa.br/digital/bitstream/item/141891/1/Manual-de-Viveiro-e-producao-de-mudas.pdf
+        http://www.espacodoagricultor.rj.gov.br/pdf/outrosassuntos/manual_tecnico_restauracao.pdf
+      
+
+  Desenvolvimento da muda no viveiro:
+    Development rate of seedlings in nursery.
+    Data type: int, label encoded
+    Number of distinct values: 3
+    Values:
+      0: Slow (up to 30 cm per year)
+      1: Fast (from 30 to 100 cm per year)
+      2: Very fast (above 100 cm per year)
+
+
+  Número de sementes/kg:
+    Number of seeds*1000 per kg.
+    Data type: numeric(float)
+
+
+  Armazenamento:
+    Recommendations for seed storage.
+    Data type: string, descriptive
+
+
+  Semeadura:
+    The recommended sowing method.
+    Data type: int, label encoded
+    Number of distinct values: 3
+    Values:
+      0: Indirect sowing, with stratification and using sawdust
+      1: Indirect sowing, using seed frame ("sementeira")
+      2: Direct sowing, using individual containers
+
+
+  Nível de sombreamento da muda no viveiro:
+    The recommended shading level in nursery.
+    Data type: int, label encoded
+    Values:
+      0: Partial shade (30% shading)
+      1: Partial shade (50% shading)
+      2: Partial shade (75% shading)
+      3: Full sun
+
+
+========
+Planting
+--------
+
+Fields:
+
+  Tolerância a Sombra:
+    Tolerance of the plant to shading.
+    Data type: int, label encoded
+    Values:
+      0: Nontolerant (typically pioneer species)
+      1: Tolerant in all stages of life cycle
+      2: Indifferent, though tolerant in the early stages of life cycle
+
+
+  Estratégia ecológica de ocupação:
+    Occupation strategy to which the species is most adequate.
+    Data type: string, categorical
+    Values:
+      diversidade: For enhancing local diversity
+      recobrimento: For enhancing vegetation cover in the area
+
+
+  Desenvolvimento da muda no campo:
+    Development rate of seedlings in field.
+    Data type: int, label encoded
+    Number of distinct values: 3
+    Values:
+      0: Slow (up to 30 cm per year)
+      1: Fast (from 30 to 100 cm per year)
+      2: Very fast (above 100 cm per year)
+
+
+  Recomendação de adubação no plantio no campo:
+    Recommendations for fertilizing while planting in field.
+    Values:
+      nenhum: No fertilization required
+      p1: SDPF (super well-drained and poorly fertile) soils, for Cerrado species
+      p2: BDPF (well-drained and poorly fertile) soils, for Cerrado species
+      p3: BDF (well-drained and fertile) soils, for "Mata Seca" species
+      p4: MDF (poorly drained and fertile) soils, for "zonas ripárias" species
+      s1: Amazônia S01
+      f1: Custom fertilization ("Durante o plantio no campo deve-se aplicar 250 kg/ha de superfosfato simples e após o estabelecimento das plantas deve-se fazer uma  adubação de cobertura com 70kg/ha de cloreto de potássio.")
+      f2: Custom fertilization (phosphate fertilization)
+
+
+======================
+Additional information
+----------------------
+
+Fields:
+
+  Porte da planta
+
+  Período de floração
+
+  Período de frutificação
+
+  Uso Econômico
+
+  Caducifolia
+
+  Polinização
+
+  Dispersão
+
