@@ -5,7 +5,7 @@ The resulting dataset is composed by the following tables:
   - main.csv : The main table, containing original information;
   - floration_periods.csv: Auxiliary table containing floration period data (one-hot encoded);
   - fruiting_periods.csv: Auxiliary table containing fruiting period data (one-hot encoded); 
-  - seeding_collection_periods.csv: Auxiliary table containing seed collection period data (one-hot encoded); 
+  - seed_collection_periods.csv: Auxiliary table containing seed collection period data (one-hot encoded); 
 
 
 ==============
@@ -15,52 +15,138 @@ Identification
 Fields:
 
 
-  Espécie
-    Scientific name of the species
+  Espécie:
+    Scientific name of the species.
     Data type: string
 
 
   Nome Popular: 
-    Vernacular name of the species
+    Vernacular name of the species.
     Data type: string, with multiple values separated by "|"
 
 
   Sinonímia: 
-    Scientific name synonyms
-    Data type: string
+    Scientific name synonyms.
+    Data type: string, with multiple values separated by "|"
 
 
   Família: 
-    Name of the family taxon to which the species belongs
+    Name of the family-rank taxon to which the species belongs.
+    Data type: string
+
+
+  Gênero:
+    Name of the genus-rank taxon to which the species belongs.
     Data type: string
 
 
   Bioma: 
-    Biomes where the species occurs
-    Data type: string, with multiple values separated by "|"
+    Biomes where the species occurs.
+    Data type: string, categorical with multiple values separated by "|"
     Number of distinct values: 6 
-    Values: [ cerrado, mata atlantica, amazonia, pantanal, caatinga, pampa ]
+    Values: 
+      cerrado
+      mata atlantica
+      amazonia
+      pantanal
+      caatinga
+      pampa
 
 
   Formação Vegetal:
-    Vegetal formations in which the species may be observed
-    Data type: string, with multiple values separated by "|"  
+    Vegetal formations in which the species may be observed.
+    Data type: string, categorical with multiple values separated by "|"  
     Number of distinct values: 3 
-    Values: [ florestal, savanica, campestre ]
+    Values: 
+      florestal
+      savanica
+      campestre
 
 
   Fitofisionomias: 
-    Phytophysiognomies in which the species may be observed
-    Data type: string, with multiple values separated by "|"
+    Phytophysiognomies in which the species may be observed.
+    Data type: string, categorical with multiple values separated by "|"
     Number of distinct values: 45 
-    Values: [ banhado, caatinga arborea, caatinga arbustiva, ... , vegetacao savanoide, vereda ]
+    Values: 
+      banhado
+      caatinga arborea
+      caatinga arbustiva
+      caatinga ciliar
+      caatinga herbacea
+      campinarana
+      campo de altitude (morraria)
+      campo inundavel
+      campo limpo
+      campo nao inundavel
+      campo rupestre
+      campo seco
+      campo sujo
+      campo umido
+      campos naturais
+      campos rupestres
+      cerradao
+      cerrado
+      cerrado rupestre
+      cerrado tipico
+      chaco
+      floresta estacional
+      floresta estacional decidual
+      floresta estacional semidecidual
+      floresta estacional sempre verde
+      floresta ombrofila densa
+      floresta ombrofila mista
+      formacoes rochosas
+      manguezal
+      mata brejo de altitude
+      mata ciliar
+      mata de galeria
+      mata de varzea
+      mata riparia
+      mata seca
+      mata seca (decidua)
+      mata semidecidua
+      palmeiral
+      parque de cerrado
+      restinga
+      restinga arborea/arbustiva
+      savana
+      terra firme
+      vegetacao savanoide
+      vereda
 
 
   Presença nos estados: 
     States where the species occurs.
-    Data type: string, with multiple values separated by "|"
+    Data type: string, categorical with multiple values separated by "|"
     Number of distinct values: 27 
-    Values: [ ac, al, am, ... ,sp, to ]
+    Values: 
+      ac: Acre 
+      al: Alagoas
+      am: Amazonas
+      ap: Amapá
+      ba: Bahia
+      ce: Ceará
+      df: Distrito Federal
+      es: Espírito Santo
+      go: Goiás
+      ma: Maranhão
+      mg: Minas Gerais
+      ms: Mato Grosso do Sul
+      mt: Mato Grosso
+      pa: Pará
+      pb: Paraíba
+      pe: Pernambuco
+      pi: Piauí
+      pr: Paraná
+      rj: Rio de Janeiro
+      rn: Rio Grande do Norte
+      ro: Rondônia
+      rr: Roraima
+      rs: Rio Grande do Sul
+      sc: Santa Catarina
+      se: Sergipe
+      sp: São Paulo
+      to: Tocantins
 
 
 
@@ -129,7 +215,7 @@ Fields:
 
   Número de sementes/kg:
     Number of seeds*1000 per kg.
-    Data type: numeric(float)
+    Data type: numeric
 
 
   Armazenamento:
@@ -192,6 +278,8 @@ Fields:
 
   Recomendação de adubação no plantio no campo:
     Recommendations for fertilizing while planting in field.
+    Data type: string, categorical
+    Number of distinct values: 7
     Values:
       nenhum: No fertilization required
       p1: SDPF (super well-drained and poorly fertile) soils, for Cerrado species
@@ -209,17 +297,111 @@ Additional information
 
 Fields:
 
-  Porte da planta
+  Porte da planta:
+    Plant habit.
+    Data type: string, categorical
+    Number of distinct values: 7
+    Values:
+      palmeira: Palm-like plants
+      arvore: Tree-like plants, more than 3 meters high
+      arvoreta: Tree-like plants, up to 3 meters high
+      arbusto: Bush-like plants
+      subarbusto: Smaller bush-like plants, up to 50 cm heigh
+      erva: Herb-like plants
+      liana: Lianas (woody climbing plants)
 
-  Período de floração
 
-  Período de frutificação
+  Período de floração:
+    The typical flowering period (months) for the species.
+    Data type: string, structured (Period-like data)
+    Values:
+      The string stores information about the flowering period for the species in each biome and state. Periods are coded as tuples, where the former element is the start month and the latter one, the end month for that period. When no particular biome is specified, the biome name becomes "all".
+      Examples: 
+        "all: (set-out)",
+        "cerrado: (jul-fev); pantanal: (out-fev); amazonia: (jul-jan)",
+        "mata atlantica: <sp (jul-set)><pr (jul-dez)><sc (jul-nov)><rs (set-nov)>"
 
-  Uso Econômico
 
-  Caducifolia
+  Período de frutificação:
+    The typical fruiting period (months) for the species.
+    Data type: string, structured (Period-like data)
+    Values:
+      The string stores information about the fruiting period for the species in each biome and state. Periods are coded as tuples, where the former element is the start month and the latter one, the end month for that period. When no particular biome is specified, the biome name becomes "all".
+      Examples: 
+        "all: (set-out)",
+        "cerrado: (jul-fev); pantanal: (out-fev); amazonia: (jul-jan)",
+        "mata atlantica: <sp (jul-set)><pr (jul-dez)><sc (jul-nov)><rs (set-nov)>"
 
-  Polinização
 
-  Dispersão
+  Uso Econômico:
+    Potential economic uses of the species.
+    Data type: string, categorical with multiple values separated by "|"
+    Number of distinct values: 22
+    Values: 
+      alimenticio  
+      aromatico  
+      artesanal  
+      celulose  
+      condimento  
+      cortica  
+      cosmetico  
+      cultural/ritualistico  
+      fibra  
+      forrageiro  
+      goma/espessante  
+      latex  
+      madeireiro  
+      medicinal  
+      melifero  
+      oleaginoso  
+      ornamental  
+      repelente  
+      resina  
+      tanifero  
+      tintorial  
+      toxico para animais 
 
+
+  Caducifolia:
+    Whether the species is deciduous (loses their leaves seasonally).
+    Data type: int, one-hot encoded
+    Values:
+      0: Not deciduous
+      1: Deciduous
+
+
+  Polinização:
+    Pollination strategy of the species.
+    Data type: string, categorical with multiple values separated by "|"
+    Number of distinct values: 19
+    Values: 
+      abelhas
+      autopolinizacao 
+      aves 
+      beija-flores 
+      besouros 
+      borboletas 
+      coleopteros 
+      dipteros 
+      formigas 
+      hemipteros 
+      insetos 
+      insetos pequenos 
+      mariposas 
+      marsupiais 
+      morcegos 
+      moscas 
+      sirfideos 
+      vento 
+      vespas
+
+  Dispersão:
+    Seed dispersion strategy of the species.
+    Data type: string, categorical with multiple values separated by "|"
+    Number of distinct values: 5
+    Values:
+      anemocoria
+      autocoria
+      epizoocoria
+      hidrocoria
+      zoocoria
