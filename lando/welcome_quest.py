@@ -1,4 +1,4 @@
-from .chat import Questionnaire, Response, Context
+from walq import Questionnaire
 
 questionnaire = {
     'q1': {
@@ -66,13 +66,13 @@ def setup_questionnaire():
     """
     Returns the questionnaire and the context
     """
-    q = Questionnaire(questionnaire)
+    q = Questionnaire(questionnaire, initial_question_id='q1')
 
     # Response to q1
-    q.questions['q1'].attachResponse( Response( condition=lambda x: f"Prazer em conhecê-lo, {x}" ) )
+    q.attachResponse('q1',response_condition=lambda x: f"Prazer em conhecê-lo, {x}")
 
     # Response to q2
-    def cond(x):
+    def cond_q2(x):
         if x>=50:
             return "Nunca é tarde para começar!"
         elif x>=30:
@@ -81,19 +81,20 @@ def setup_questionnaire():
             return "É ótimo começar cedo!"
         else:
             return "Você tem certeza que deveria estar usando este app?"
-    q.questions['q2'].attachResponse( Response( condition=cond ) )
+    q.attachResponse('q2', response_condition=cond_q2)
 
     # Response to q3
-    q.questions['q3'].attachResponse( Response( condition=lambda x: 'Certo... antes você precisará recuperar seu solo.' if x==1 else 'Ótimo!' ) )
+    q.attachResponse('q3', response_condition=lambda x: 'Certo... antes você precisará recuperar seu solo.' if x==1 else 'Ótimo!')
 
     # Response to q4
-    q.questions['q4'].attachResponse( Response( condition=lambda x: 'Entendo... é importante que vc cerque a área, ok?' if x==1 else 'Bom!') )
+    q.attachResponse('q4', response_condition=lambda x: 'Entendo... é importante que vc cerque a área, ok?' if x==1 else 'Bom!')
 
     # Response to q5
-    q.questions['q5'].attachResponse( Response( condition=lambda x: 'Que tal construir um aceiro?' if x==1 else 'Bom!' ) )
+    q.attachResponse('q5',  response_condition=lambda x: 'Que tal construir um aceiro?' if x==1 else 'Bom!' )
 
-    # Build context
-    c = Context(current_question='q1')
 
-    return q,c
+    return q
 
+
+if __name__=='__main__':
+    setup_questionnaire().run()
